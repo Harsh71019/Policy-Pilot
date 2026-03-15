@@ -55,16 +55,33 @@ export async function upsertChunks(embedded: EmbeddedChunk[]): Promise<void> {
   console.log(`  ✓ Upserted ${embedded.length} chunks into "${COLLECTION_NAME}"`);
 }
 
+export interface QueryFilter {
+  department?: string;
+  fileType?: 'pdf' | 'docx';
+  accessLevel?: string;
+}
+
 // Query the collection with a pre-computed embedding vector.
 // Returns the top-k most similar chunks with their metadata and distances.
+// Optionally filter by metadata fields — only chunks matching the filter are searched.
 export async function queryCollection(
   queryVector: number[],
   topK: number = 5,
+  filter?: QueryFilter,
 ) {
   const collection = await getCollection();
+
+  // Build ChromaDB `where` clause from filter — only include fields that were provided
+  const where = filter
+    ? Object.fromEntries(
+        Object.entries(filter).filter(([, v]) => v !== undefined),
+      )
+    : undefined;
+
   return collection.query({
     queryEmbeddings: [queryVector],
     nResults: topK,
     include: ['documents', 'metadatas', 'distances'],
+    ...(where && Object.keys(where).length > 0 ? { where } : {}),
   });
 }

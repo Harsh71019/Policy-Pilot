@@ -13,15 +13,30 @@ interface ChunkOptions {
   overlap?: number;    // characters to repeat from the previous chunk (default 50)
 }
 
-// Find the nearest word boundary at or before `pos` so we never split mid-word.
-// Example: "...employee benefits are" split at 22 → snaps back to 20 (before "are")
-function snapToWordBoundary(text: string, pos: number): number {
+// Find the best split point at or before `pos`, in order of preference:
+// 1. Sentence boundary (. ! ? followed by space or newline)
+// 2. Word boundary (last space before pos)
+// 3. Hard cut at pos (fallback — overlap handles continuity)
+function snapToBoundary(text: string, pos: number): number {
   if (pos >= text.length) return text.length;
-  // If we're already at a space or the char before is a space, we're clean
-  if (text[pos] === ' ' || text[pos - 1] === ' ') return pos;
-  // Walk back to find the last space before pos
+
+  // Search backwards from pos for a sentence-ending punctuation followed by whitespace.
+  // We search within a 100-char window — no point walking the whole chunk.
+  const searchFrom = Math.max(0, pos - 100);
+  const window = text.slice(searchFrom, pos);
+  const sentenceMatch = window.search(/[.!?][)\]"']?\s/g);
+
+  if (sentenceMatch !== -1) {
+    // +1 to include the punctuation character itself in the current chunk
+    return searchFrom + sentenceMatch + 1;
+  }
+
+  // No sentence boundary — fall back to word boundary
   const lastSpace = text.lastIndexOf(' ', pos);
-  return lastSpace === -1 ? pos : lastSpace;
+  if (lastSpace !== -1) return lastSpace;
+
+  // No word boundary either — hard cut
+  return pos;
 }
 
 export function chunkDocument(
@@ -37,10 +52,9 @@ export function chunkDocument(
   let start = 0;
 
   while (start < text.length) {
-    // Raw end position before snapping to word boundary
+    // Raw end position before snapping to sentence/word boundary
     const rawEnd = start + chunkSize;
-    // Snap end to nearest word boundary so we don't cut a word in half
-    const end = snapToWordBoundary(text, rawEnd);
+    const end = snapToBoundary(text, rawEnd);
 
     const chunkText = text.slice(start, end).trim();
 

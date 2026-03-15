@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    // --- OUTPUT ---
+    "outDir": "./dist",       // compiled JS lands here — this is what Node actually runs
+    "rootDir": "./src",       // TypeScript only compiles files under src/
+
+    // --- THE TWO SETTINGS THAT ACTUALLY MATTER FOR ESM + NODE ---
+
+    // "NodeNext" tells TS to emit proper ES Module syntax AND enforce that
+    // your import paths include file extensions (e.g. './chunker.js' not './chunker')
+    // Without this, Node's ESM loader can't resolve your imports at runtime
+    "module": "NodeNext",
+
+    // Must match "module" — tells TS to resolve imports the same way Node does
+    // (checks package.json "exports" field, requires extensions, etc.)
+    // Using "node16" or "bundler" here while module is "NodeNext" = silent bugs
+    "moduleResolution": "NodeNext",
+
+    // --- TARGET ---
+    // ES2022 gives us top-level await (used in the ingest script) and
+    // modern class features — safe because we're on Node 18+
+    "target": "ES2022",
+
+    // --- QUALITY ---
+    "strict": true,           // catches null/undefined bugs at compile time, not runtime
+    "esModuleInterop": true,  // lets us import CommonJS packages (pdf-parse) with default import syntax
+
+    // --- DX ---
+    "sourceMap": true,        // maps runtime errors back to .ts line numbers in stack traces
+    "declaration": true       // emits .d.ts files — useful when other TS projects import this
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

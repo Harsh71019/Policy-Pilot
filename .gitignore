@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+
+# Compiled output — run `npm run build` to regenerate
+dist/
+
+# Environment variables — NEVER commit this, API keys live here
+.env
+
+# ChromaDB persists vector data locally — too large for git, regenerate with `npm run ingest`
+chroma_data/
+
+# OS noise
+.DS_Store

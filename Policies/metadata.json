@@ -1,0 +1,50 @@
+[
+  {
+    "filename": "Employee Leave Policy.pdf",
+    "category": "Policy",
+    "department": "Human Resources",
+    "access_level": "Internal",
+    "effective_date": "2024-01-01",
+    "tags": ["leave", "vacation", "sick leave", "maternity", "paternity"]
+  },
+  {
+    "filename": "Travel & Reimbursement Policy.pdf",
+    "category": "Policy",
+    "department": "Finance",
+    "access_level": "Internal",
+    "effective_date": "2024-02-01",
+    "tags": ["travel", "expense", "reimbursement", "flights", "hotels"]
+  },
+  {
+    "filename": "Employee Benefits Guide 2024.pdf",
+    "category": "Guide",
+    "department": "Human Resources",
+    "access_level": "Internal",
+    "effective_date": "2024-01-01",
+    "tags": ["benefits", "insurance", "401k", "health", "wellness"]
+  },
+  {
+    "filename": "Anti-Harassment & Discrimination Policy.pdf",
+    "category": "Policy",
+    "department": "Legal & Compliance",
+    "access_level": "Public",
+    "effective_date": "2024-01-01",
+    "tags": ["ethics", "harassment", "discrimination", "reporting", "conduct"]
+  },
+  {
+    "filename": "Remote Work & Hybrid Policy.docx",
+    "category": "Policy",
+    "department": "Operations",
+    "access_level": "Internal",
+    "effective_date": "2024-03-01",
+    "tags": ["remote", "hybrid", "office", "wfh", "equipment"]
+  },
+  {
+    "filename": "Capgemini Group Code of Business Ethics.docx",
+    "category": "Policy",
+    "department": "Legal & Compliance",
+    "access_level": "Public",
+    "effective_date": "2024-01-01",
+    "tags": ["ethics", "values", "integrity", "confidentiality", "conduct"]
+  }
+]
